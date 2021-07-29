@@ -1,0 +1,3 @@
+include ':DocLibrary'
+include ':app'
+rootProject.name = "Arpit Doc Upload Library"
