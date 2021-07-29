@@ -74,7 +74,7 @@ public class DocumentUpload extends AppCompatActivity {
             else
             {
                 Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-                startActivityForResult(cameraIntent, SELECT_PICTURE_FROM_CAMERA);
+                ((Activity) context).startActivityForResult(cameraIntent, SELECT_PICTURE_FROM_CAMERA);
             }
 
         }
@@ -93,7 +93,7 @@ public class DocumentUpload extends AppCompatActivity {
 
                 // pass the constant to compare it
                 // with the returned requestCode
-                startActivityForResult(Intent.createChooser(i, "Select Picture"), SELECT_PICTURE_FROM_GALLERY);
+                ((Activity) context).startActivityForResult(Intent.createChooser(i, "Select Picture"), SELECT_PICTURE_FROM_GALLERY);
             }
 
         }
@@ -111,7 +111,7 @@ public class DocumentUpload extends AppCompatActivity {
                 {
                     Toast.makeText(context, "camera permission granted", Toast.LENGTH_LONG).show();
                     Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-                    startActivityForResult(cameraIntent, SELECT_PICTURE_FROM_CAMERA);
+                    ((Activity) context).startActivityForResult(cameraIntent, SELECT_PICTURE_FROM_CAMERA);
                 }
                 else
                 {
@@ -129,7 +129,7 @@ public class DocumentUpload extends AppCompatActivity {
 
                     // pass the constant to compare it
                     // with the returned requestCode
-                    startActivityForResult(Intent.createChooser(i, "Select Picture"), SELECT_PICTURE_FROM_GALLERY);
+                    ((Activity) context).startActivityForResult(Intent.createChooser(i, "Select Picture"), SELECT_PICTURE_FROM_GALLERY);
                 }
                 else
                 {

@@ -21,7 +21,7 @@ public class MainActivity extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DocumentUpload documentUpload =  new DocumentUpload();
+                DocumentUpload documentUpload =  new DocumentUpload(MainActivity.this);
                 Bitmap bitmap = documentUpload.showDocChooser();
                 imageView.setImageBitmap(bitmap);
             }
