@@ -26,7 +26,12 @@ public class DocumentUpload extends AppCompatActivity {
     int SELECT_PICTURE_FROM_CAMERA = 0;
     final int MY_CAMERA_PERMISSION_CODE = 10;
     Bitmap doc;
+    Context context;
 
+    public DocumentUpload(Context context)
+    {
+        this.context = context;
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,7 +41,7 @@ public class DocumentUpload extends AppCompatActivity {
 
 
 
-    public Bitmap showDocChooser(Context context)
+    public Bitmap showDocChooser()
     {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle("Set profile image<");
@@ -62,9 +67,9 @@ public class DocumentUpload extends AppCompatActivity {
 
         private void onTakeCameraSelected()
         {
-            if (ActivityCompat.checkSelfPermission(this , Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED)
+            if (ActivityCompat.checkSelfPermission((Activity)context , Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED)
             {
-                ActivityCompat.requestPermissions(this , new String[]{Manifest.permission.CAMERA}, MY_CAMERA_PERMISSION_CODE);
+                ActivityCompat.requestPermissions((Activity)context , new String[]{Manifest.permission.CAMERA}, MY_CAMERA_PERMISSION_CODE);
             }
             else
             {
@@ -76,9 +81,9 @@ public class DocumentUpload extends AppCompatActivity {
 
         private void  onChooseGallerySelected()
         {
-            if (ActivityCompat.checkSelfPermission(this , Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)
+            if (ActivityCompat.checkSelfPermission((Activity)context , Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)
             {
-                ActivityCompat.requestPermissions(this , new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, MY_GALLERY_PERMISSION_CODE);
+                ActivityCompat.requestPermissions((Activity)context , new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, MY_GALLERY_PERMISSION_CODE);
             }
             else
             {
@@ -104,20 +109,20 @@ public class DocumentUpload extends AppCompatActivity {
             case MY_CAMERA_PERMISSION_CODE:
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED)
                 {
-                    Toast.makeText(this, "camera permission granted", Toast.LENGTH_LONG).show();
+                    Toast.makeText(context, "camera permission granted", Toast.LENGTH_LONG).show();
                     Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
                     startActivityForResult(cameraIntent, SELECT_PICTURE_FROM_CAMERA);
                 }
                 else
                 {
-                    Toast.makeText(this, "camera permission denied", Toast.LENGTH_LONG).show();
+                    Toast.makeText(context, "camera permission denied", Toast.LENGTH_LONG).show();
                 }
                 break;
 
             case MY_GALLERY_PERMISSION_CODE:
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED)
                 {
-                    Toast.makeText(this, "gallery permission granted", Toast.LENGTH_LONG).show();
+                    Toast.makeText(context, "gallery permission granted", Toast.LENGTH_LONG).show();
                     Intent i = new Intent();
                     i.setType("image/*");
                     i.setAction(Intent.ACTION_GET_CONTENT);
@@ -128,7 +133,7 @@ public class DocumentUpload extends AppCompatActivity {
                 }
                 else
                 {
-                    Toast.makeText(this, "external storage permission denied", Toast.LENGTH_LONG).show();
+                    Toast.makeText(context, "external storage permission denied", Toast.LENGTH_LONG).show();
                 }
                 break;
         }

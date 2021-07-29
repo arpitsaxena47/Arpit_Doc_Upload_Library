@@ -8,6 +8,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 
+import com.arpit.doclibrary.DocumentUpload;
+
 public class MainActivity extends AppCompatActivity {
 
     @Override
@@ -19,8 +21,9 @@ public class MainActivity extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                Bitmap bitmap = showDocChooser(DocumentUpload.this);
-//                imageView.setImageBitmap(bitmap);
+                DocumentUpload documentUpload =  new DocumentUpload();
+                Bitmap bitmap = documentUpload.showDocChooser();
+                imageView.setImageBitmap(bitmap);
             }
         });
     }
