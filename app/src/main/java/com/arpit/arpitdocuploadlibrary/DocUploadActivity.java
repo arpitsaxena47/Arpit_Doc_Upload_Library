@@ -1,4 +1,6 @@
-package com.arpit.doclibrary;
+package com.arpit.arpitdocuploadlibrary;
+
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -24,7 +26,7 @@ import java.security.Permission;
 
 import static androidx.core.content.FileProvider.getUriForFile;
 
-public class DocumentUpload extends AppCompatActivity {
+public class DocUploadActivity extends AppCompatActivity {
     public static final String INTENT_IMAGE_PICKER_OPTION = "image_picker_option";
     public static final int REQUEST_IMAGE_CAPTURE = 0;
     public static final int REQUEST_GALLERY_IMAGE = 1;
@@ -34,9 +36,9 @@ public class DocumentUpload extends AppCompatActivity {
     final int  MY_GALLERY_PERMISSION_CODE = 11;
     int SELECT_PICTURE_FROM_CAMERA = 0;
     final int MY_CAMERA_PERMISSION_CODE = 10;
-    Uri doc;
+     Uri doc;
     public static String fileName;
-    public Context context = DocumentUpload.this;
+    public Context context = DocUploadActivity.this;
 
 //    public interface PickerOptionListener {
 //        void onTakeCameraSelected();
@@ -44,11 +46,11 @@ public class DocumentUpload extends AppCompatActivity {
 //        void onChooseGallerySelected();
 //    }
 
-    //    public DocumentUpload(Context context)
+//    public DocUploadActivity(Context context)
 //    {
 //        this.context = context;
 //    }
-    public DocumentUpload(){}
+    public DocUploadActivity(){}
     public interface PickerOptionListener {
         void onTakeCameraSelected();
 
@@ -57,7 +59,7 @@ public class DocumentUpload extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_document_upload);
+        setContentView(R.layout.activity_doc_upload);
 
         Intent intent = getIntent();
         if (intent == null) {
@@ -225,6 +227,6 @@ public class DocumentUpload extends AppCompatActivity {
         File path = new File(getExternalCacheDir(), "camera");
         if (!path.exists()) path.mkdirs();
         File image = new File(path, fileName);
-        return getUriForFile(DocumentUpload.this, getPackageName() + ".provider", image);
+        return getUriForFile(DocUploadActivity.this, getPackageName() + ".provider", image);
     }
 }

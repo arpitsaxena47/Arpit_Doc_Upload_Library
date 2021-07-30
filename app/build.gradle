@@ -36,5 +36,5 @@ dependencies {
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
-    implementation 'com.github.arpitsaxena47:Arpit_Doc_Upload_Library:0.1.1'
+//    implementation 'com.github.arpitsaxena47:Arpit_Doc_Upload_Library:0.1.1'
 }
