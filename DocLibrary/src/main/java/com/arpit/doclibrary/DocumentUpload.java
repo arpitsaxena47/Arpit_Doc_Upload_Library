@@ -6,16 +6,20 @@ import androidx.core.app.ActivityCompat;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.MediaStore;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -32,13 +36,13 @@ public class DocumentUpload extends AppCompatActivity {
 
 
     int SELECT_PICTURE_FROM_GALLERY = 1;
-    final int  MY_GALLERY_PERMISSION_CODE = 11;
+    final int MY_GALLERY_PERMISSION_CODE = 11;
     int SELECT_PICTURE_FROM_CAMERA = 0;
     final int MY_CAMERA_PERMISSION_CODE = 10;
     Uri doc;
     public static String fileName;
     public Context context = DocumentUpload.this;
-    ImageView imgSuccess,imgFailure;
+    ImageView imgSuccess, imgFailure;
 
 //    public interface PickerOptionListener {
 //        void onTakeCameraSelected();
@@ -50,12 +54,15 @@ public class DocumentUpload extends AppCompatActivity {
 //    {
 //        this.context = context;
 //    }
-    public DocumentUpload(){}
+    public DocumentUpload() {
+    }
+
     public interface PickerOptionListener {
         void onTakeCameraSelected();
 
         void onChooseGallerySelected();
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -78,9 +85,7 @@ public class DocumentUpload extends AppCompatActivity {
     }
 
 
-
-    public  static void showDocChooser(Context context, PickerOptionListener listener)
-    {
+    public static void showDocChooser(Context context, PickerOptionListener listener) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle("Set profile image");
 
@@ -106,14 +111,10 @@ public class DocumentUpload extends AppCompatActivity {
 //        return doc;
     }
 
-    private void onTakeCameraSelected()
-    {
-        if (ActivityCompat.checkSelfPermission((Activity)context , Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED)
-        {
-            ActivityCompat.requestPermissions((Activity)context , new String[]{Manifest.permission.CAMERA}, MY_CAMERA_PERMISSION_CODE);
-        }
-        else
-        {
+    private void onTakeCameraSelected() {
+        if (ActivityCompat.checkSelfPermission((Activity) context, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions((Activity) context, new String[]{Manifest.permission.CAMERA}, MY_CAMERA_PERMISSION_CODE);
+        } else {
             fileName = System.currentTimeMillis() + ".jpg";
             Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
             takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, getCacheImagePath(fileName));
@@ -126,14 +127,10 @@ public class DocumentUpload extends AppCompatActivity {
 
     }
 
-    private void  onChooseGallerySelected()
-    {
-        if (ActivityCompat.checkSelfPermission((Activity)context , Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)
-        {
-            ActivityCompat.requestPermissions((Activity)context , new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, MY_GALLERY_PERMISSION_CODE);
-        }
-        else
-        {
+    private void onChooseGallerySelected() {
+        if (ActivityCompat.checkSelfPermission((Activity) context, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions((Activity) context, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, MY_GALLERY_PERMISSION_CODE);
+        } else {
             Intent i = new Intent();
             i.setType("image/*");
             i.setAction(Intent.ACTION_GET_CONTENT);
@@ -146,16 +143,12 @@ public class DocumentUpload extends AppCompatActivity {
     }
 
 
-
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults)
-    {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        switch(requestCode)
-        {
+        switch (requestCode) {
             case MY_CAMERA_PERMISSION_CODE:
-                if (grantResults[0] == PackageManager.PERMISSION_GRANTED)
-                {
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     Toast.makeText(context, "camera permission granted", Toast.LENGTH_LONG).show();
                     fileName = System.currentTimeMillis() + ".jpg";
                     Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -163,16 +156,13 @@ public class DocumentUpload extends AppCompatActivity {
                     if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
                         ((Activity) context).startActivityForResult(takePictureIntent, SELECT_PICTURE_FROM_CAMERA);
                     }
-                }
-                else
-                {
+                } else {
                     Toast.makeText(context, "camera permission denied", Toast.LENGTH_LONG).show();
                 }
                 break;
 
             case MY_GALLERY_PERMISSION_CODE:
-                if (grantResults[0] == PackageManager.PERMISSION_GRANTED)
-                {
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     Toast.makeText(context, "gallery permission granted", Toast.LENGTH_LONG).show();
                     Intent i = new Intent();
                     i.setType("image/*");
@@ -181,43 +171,36 @@ public class DocumentUpload extends AppCompatActivity {
                     // pass the constant to compare it
                     // with the returned requestCode
                     ((Activity) context).startActivityForResult(Intent.createChooser(i, "Select Picture"), SELECT_PICTURE_FROM_GALLERY);
-                }
-                else
-                {
+                } else {
                     Toast.makeText(context, "external storage permission denied", Toast.LENGTH_LONG).show();
                 }
                 break;
         }
 
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == SELECT_PICTURE_FROM_CAMERA) {
             Intent intent = new Intent();
-            if(resultCode == Activity.RESULT_OK)
-            {
+            if (resultCode == Activity.RESULT_OK) {
                 intent.putExtra("uri", getCacheImagePath(fileName));
                 setResult(Activity.RESULT_OK, intent);
-            }
-            else
-            {
+            } else {
                 setResult(Activity.RESULT_CANCELED, intent);
             }
             finish();
 //            doc = data.getData();
 
         }
-        if (requestCode == SELECT_PICTURE_FROM_GALLERY ) {
+        if (requestCode == SELECT_PICTURE_FROM_GALLERY) {
 //            doc = data.getData();
             Intent intent = new Intent();
-            if(resultCode == Activity.RESULT_OK)
-            {
+            if (resultCode == Activity.RESULT_OK) {
                 intent.putExtra("uri", data.getData());
                 setResult(Activity.RESULT_OK, intent);
-            }
-            else
-            {
+            } else {
                 setResult(Activity.RESULT_CANCELED, intent);
             }
             finish();
@@ -232,41 +215,75 @@ public class DocumentUpload extends AppCompatActivity {
         return getUriForFile(DocumentUpload.this, getPackageName() + ".provider", image);
     }
 
-    public void showSuccessScreen(Context c)
-    {
-        Intent i = new Intent(c, DocumentUpload.class);
-        imgSuccess.setVisibility(View.VISIBLE);
-        startActivity(i);
+//    public void showSuccessScreen(Context c) {
+//        Intent i = new Intent(c, DocumentUpload.class);
+//        c.startActivity(i);
+//        findViewById(R.id.imgSuccess).setVisibility(View.VISIBLE);
+//
+//        final Handler handler = new Handler();
+//        handler.postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                findViewById(R.id.imgSuccess).setVisibility(View.GONE);
+//                Intent intent = new Intent(context, c.getClass());
+//                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//                context.startActivity(intent);
+//
+//            } final Handler handler = new Handler();
+////        handler.postDelayed(new Runnable() {
+////            @Override
+////            public void run() {
+////                imgFailure.setVisibility(View.GONE);
+////                Intent intent = new Intent((Activity) context, c.getClass());
+////                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+////                context.startActivity(intent);
+////
+////            }
+////        }, 2000);
+//        }, 2000);
+//
+//    }
+//
+//    public void showFailureScreen(Context c) {
+//        Intent i = new Intent(c, DocumentUpload.class);
+//        context.startActivity(i);
+//        this.imgFailure.setVisibility(View.VISIBLE);
+//
+//    }
+
+    public void showSuccessDialog(Context c) {
+        Dialog settingsDialog = new Dialog(c);
+        settingsDialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        LayoutInflater inflater = (LayoutInflater) c.getSystemService( Context.LAYOUT_INFLATER_SERVICE );
+        settingsDialog.setContentView(inflater.inflate(R.layout.activity_success
+                , null));
+        settingsDialog.show();
         final Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-
-                Intent intent = new Intent((Activity)context , c.getClass());
-                imgSuccess.setVisibility(View.GONE);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(intent);
+                settingsDialog.dismiss();
 
             }
         }, 2000);
 
     }
-    public void showFailureScreen(Context c)
-    {
-        Intent i = new Intent(c, DocumentUpload.class);
-        imgFailure.setVisibility(View.VISIBLE);
-        startActivity(i);
+    public  void showFailureDialog(Context c) {
+        Dialog settingsDialog = new Dialog(c );
+        settingsDialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        LayoutInflater inflater = (LayoutInflater) c.getSystemService( Context.LAYOUT_INFLATER_SERVICE );
+        settingsDialog.setContentView(inflater.inflate(R.layout.activity_failure
+                , null));
+        settingsDialog.show();
         final Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-
-                Intent intent = new Intent((Activity)context , c.getClass());
-                imgFailure.setVisibility(View.GONE);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(intent);
+                settingsDialog.dismiss();
 
             }
         }, 2000);
+
+
     }
 }

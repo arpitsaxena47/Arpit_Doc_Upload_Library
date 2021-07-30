@@ -7,15 +7,18 @@ import androidx.core.app.ActivityCompat;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -27,6 +30,8 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import static android.content.ContentValues.TAG;
 
@@ -47,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
          imageView = findViewById(R.id.imageView);
          button = findViewById(R.id.button);
+        Toast.makeText(context, "Please, Click On Upload Button To Upload Image....", Toast.LENGTH_LONG).show();
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -91,6 +97,7 @@ public class MainActivity extends AppCompatActivity {
             if (resultCode == Activity.RESULT_OK) {
                 Uri uri = data.getParcelableExtra("uri");
                 imageView.setImageURI(uri);
+                uploadToDatabase(uri);
 //                try {
 //                    // You can update this bitmap to your server
 //                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), uri);
@@ -108,13 +115,16 @@ public class MainActivity extends AppCompatActivity {
     private  void uploadToDatabase(Uri uri)
     {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        Map<String, Object> doc = new HashMap<>();
+        doc.put("Document Uri" , uri.toString());
         db.collection("users")
-                .add(uri)
+                .add(doc)
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
 //                        Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
-
+                       new DocumentUpload().showSuccessDialog(context);
 
                     }
                 })
@@ -122,6 +132,8 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onFailure(@NonNull Exception e) {
 //                        Log.w(TAG, "Error adding document", e);
+                        new DocumentUpload().showFailureDialog(context);
+//                        showFailureDialog(context);
                     }
                 });
 
