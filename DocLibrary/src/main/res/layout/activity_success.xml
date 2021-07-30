@@ -3,19 +3,22 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:gravity="center">
 
     <ImageView
         android:id="@+id/imgSuccess"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:srcCompat="@drawable/success" />
+        android:layout_width="400dp"
+        android:layout_height="400dp"
+        app:srcCompat="@drawable/success"
+        android:layout_below="@+id/txtSuccess"/>
 
     <TextView
+        android:id="@+id/txtSuccess"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="130dp"
+        android:layout_marginTop="20dp"
         android:gravity="center_horizontal"
         android:text="Document Uploaded Successfully"
         android:textSize="35sp"

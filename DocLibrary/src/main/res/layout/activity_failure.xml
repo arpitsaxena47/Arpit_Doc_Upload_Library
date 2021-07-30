@@ -3,22 +3,25 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:gravity="center">
 
     <ImageView
-        android:id="@+id/imgSuccess"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:srcCompat="@drawable/failure" />
+        android:id="@+id/imgFailure"
+        android:layout_width="400dp"
+        android:layout_height="400dp"
+        app:srcCompat="@drawable/failure"
+        android:layout_below="@+id/txtFailure"/>
 
     <TextView
+        android:id="@+id/txtFailure"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="130dp"
+        android:layout_marginTop="20dp"
         android:gravity="center_horizontal"
-        android:text="Document Upload Failed!!"
-        android:textSize="37sp"
+        android:text="Document Uploaded Successfully"
+        android:textSize="35sp"
         android:textStyle="bold" />
 
 </RelativeLayout>

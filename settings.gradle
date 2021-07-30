@@ -1,5 +1,2 @@
 include ':DocLibrary'
 include ':app'
-rootProject.name = "Arpit Doc Upload Library"
-include ':DocLibrary'
-project (':DocLibrary').projectDir = new File('C:\\AndroidProjects\\ArpitDocUploadLibrary\\DocLibrary')
