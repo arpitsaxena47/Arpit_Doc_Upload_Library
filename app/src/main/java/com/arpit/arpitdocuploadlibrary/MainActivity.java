@@ -14,12 +14,21 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.arpit.doclibrary.DocumentUpload;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+
 import java.io.IOException;
+
+import static android.content.ContentValues.TAG;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -47,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private  void showImagePickerOptions() {
-        DocUploadActivity.showDocChooser(context, new DocUploadActivity.PickerOptionListener() {
+        DocumentUpload.showDocChooser(context, new DocumentUpload.PickerOptionListener() {
             @Override
             public void onTakeCameraSelected() {
                 launchCameraIntent();
@@ -61,15 +70,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void launchCameraIntent() {
-        Intent intent = new Intent(context, DocUploadActivity.class);
-        intent.putExtra(DocUploadActivity.INTENT_IMAGE_PICKER_OPTION, DocUploadActivity.REQUEST_IMAGE_CAPTURE);
+        Intent intent = new Intent(context, DocumentUpload.class);
+        intent.putExtra(DocumentUpload.INTENT_IMAGE_PICKER_OPTION, DocumentUpload.REQUEST_IMAGE_CAPTURE);
 
         startActivityForResult(intent, REQUEST_IMAGE);
     }
 
     private void launchGalleryIntent() {
-        Intent intent = new Intent(context, DocUploadActivity.class);
-        intent.putExtra(DocUploadActivity.INTENT_IMAGE_PICKER_OPTION, DocUploadActivity.REQUEST_GALLERY_IMAGE);
+        Intent intent = new Intent(context, DocumentUpload.class);
+        intent.putExtra(DocumentUpload.INTENT_IMAGE_PICKER_OPTION, DocumentUpload.REQUEST_GALLERY_IMAGE);
 
         startActivityForResult(intent, REQUEST_IMAGE);
     }
@@ -96,8 +105,25 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
-    private  void onButtonClick()
+    private  void uploadToDatabase(Uri uri)
     {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("users")
+                .add(uri)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+//                        Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
+
+
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+//                        Log.w(TAG, "Error adding document", e);
+                    }
+                });
 
     }
 

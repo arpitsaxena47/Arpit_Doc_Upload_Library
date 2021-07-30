@@ -13,6 +13,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.view.View;
 import android.widget.Button;
@@ -37,6 +38,7 @@ public class DocumentUpload extends AppCompatActivity {
     Uri doc;
     public static String fileName;
     public Context context = DocumentUpload.this;
+    ImageView imgSuccess,imgFailure;
 
 //    public interface PickerOptionListener {
 //        void onTakeCameraSelected();
@@ -58,6 +60,8 @@ public class DocumentUpload extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_document_upload);
+        imgFailure = findViewById(R.id.imgFailure);
+        imgSuccess = findViewById(R.id.imgSuccess);
 
         Intent intent = getIntent();
         if (intent == null) {
@@ -226,5 +230,43 @@ public class DocumentUpload extends AppCompatActivity {
         if (!path.exists()) path.mkdirs();
         File image = new File(path, fileName);
         return getUriForFile(DocumentUpload.this, getPackageName() + ".provider", image);
+    }
+
+    public void showSuccessScreen(Context c)
+    {
+        Intent i = new Intent(c, DocumentUpload.class);
+        imgSuccess.setVisibility(View.VISIBLE);
+        startActivity(i);
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+
+                Intent intent = new Intent((Activity)context , c.getClass());
+                imgSuccess.setVisibility(View.GONE);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+
+            }
+        }, 2000);
+
+    }
+    public void showFailureScreen(Context c)
+    {
+        Intent i = new Intent(c, DocumentUpload.class);
+        imgFailure.setVisibility(View.VISIBLE);
+        startActivity(i);
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+
+                Intent intent = new Intent((Activity)context , c.getClass());
+                imgFailure.setVisibility(View.GONE);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+
+            }
+        }, 2000);
     }
 }
